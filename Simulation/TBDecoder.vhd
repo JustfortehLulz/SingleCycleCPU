@@ -12,6 +12,7 @@ end decoder_tb;
 
 architecture sim of decoder_tb is
 
+    -- TODO: Create the Decoder text file for test cases
 	constant TestVectorFile : string := "DecoderUnit00.txt";
 	constant ClockPeriod : time := 2 ns;
 	constant ResetPeriod : time := 5 ns;
