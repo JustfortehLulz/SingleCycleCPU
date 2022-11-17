@@ -13,7 +13,7 @@ end decoder_tb;
 architecture sim of decoder_tb is
 
     -- TODO: Next steps, wait until allout is finished and compare the values
-	constant TestVectorFile : string := "DecoderUnit00.txt";
+	constant TestVectorFile : string := "DecoderUnit00.tvs";
 	constant ClockPeriod : time := 2 ns;
 	constant ResetPeriod : time := 5 ns;
 	constant PreStimTime : time := 1 ns;
@@ -103,13 +103,13 @@ begin
             StartTime := NOW;
             ResultV := '1';
             readline(VectorFile, LineBuffer);
-            hread(LineBuffer, instVar);
-            hread(LineBuffer, sevenVar);
-            hread(LineBuffer, rs2Var);
-            hread(LineBuffer, rs1Var);
-            hread(LineBuffer, threeVar);
-            hread(LineBuffer, rdVar);
-            hread(LineBuffer, opVar);
+            read(LineBuffer, instVar);
+            read(LineBuffer, sevenVar);
+            read(LineBuffer, rs2Var);
+            read(LineBuffer, rs1Var);
+            read(LineBuffer, threeVar);
+            read(LineBuffer, rdVar);
+            read(LineBuffer, opVar);
 
             instruction <= instVar;
             tb_opcode <= opVar;
@@ -119,8 +119,70 @@ begin
             tb_rs2 <= rs2Var;
             tb_rd <= rdVar;
 
-            wait until 
+            wait until allout'quiet(PostStimTime) = true;
+
+            EndTime := Now;
+            PropTimeDelay := EndTime - StartTime - allout'Last_Active;
+
+            if opcode /= tb_opcode then
+                ResultV := '0';
+                assert opcode = tb_opcode
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  opcode = " & to_hstring(opcode) & CR &
+                "tb_opcode = " & to_hstring(tb_opcode)
+                Severity error;
+            end if;
+
+            if funct7 /= tb_funct7 then
+                ResultV := '0';
+                assert funct7 = tb_funct7
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  funct7 = " & to_hstring(funct7) & CR &
+                "tb_funct7 = " & to_hstring(tb_funct7)
+                Severity error;
+            end if;
+
+            if funct3 /= tb_funct3 then
+                ResultV := '0';
+                assert funct3 = tb_funct3
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  funct3 = " & to_hstring(funct3) & CR &
+                "tb_funct3 = " & to_hstring(tb_funct3)
+                Severity error;
+            end if;
+
+            if rs1 /= tb_rs1 then
+                ResultV := '0';
+                assert rs1 = tb_rs1
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  rs1 = " & to_hstring(rs1) & CR &
+                "tb_rs1 = " & to_hstring(tb_rs1)
+                Severity error;
+            end if;
+
+            if rs2 /= tb_rs2 then
+                ResultV := '0';
+                assert rs1 = tb_rs1
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  rs2 = " & to_hstring(rs2) & CR &
+                "tb_rs2 = " & to_hstring(tb_rs2)
+                Severity error;
+            end if;
+
+            if rd /= tb_rd then
+                ResultV := '0';
+                assert rs1 = tb_rs1
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  rd = " & to_hstring(rd) & CR &
+                "tb_rd = " & to_hstring(tb_rd)
+                Severity error;
+            end if;
+
+            wait until clock = '1';
         end loop;
+    Report "Simulation Completed";
+    file_close( VectorFile );
+    Wait;
     end process;
 
 end architecture;
