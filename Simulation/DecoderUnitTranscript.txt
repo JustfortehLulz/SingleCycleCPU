@@ -1,0 +1,63 @@
+# transcript on
+#----------------------------------------------------------------------------------------------------------
+# compile
+#----------------------------------------------------------------------------------------------------------
+# vcom -work work -2008 -explicit -stats=none TBDecoder.vhd
+# Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package ENV
+# -- Compiling entity decoder_tb
+# -- Compiling architecture behavioural of decoder_tb
+# -- Loading entity decoder
+# 
+#----------------------------------------------------------------------------------------------------------
+# Start the simulation
+#----------------------------------------------------------------------------------------------------------
+# vsim -gui work.decoder_tb -t 100ps
+# vsim -gui work.decoder_tb -t 100ps 
+# Start time: 21:23:41 on Nov 16,2022
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading std.env(body)
+# Loading work.decoder_tb(behavioural)
+# Loading work.decoder(rtl)
+# transcript off
+#----------------------------------------------------------------------------------------------------------
+# Simulation Run
+#----------------------------------------------------------------------------------------------------------
+# restart -f
+# run 4120 ns
+# ** Note: Using TestVectors from file DecoderUnit00.tvs
+#    Time: 15 ns  Iteration: 0  Instance: /decoder_tb
+# ** Error: Measurement Index := 1
+#   opcode = XX
+# tb_opcode = 33
+#    Time: 46 ns  Iteration: 0  Instance: /decoder_tb
+# ** Error: Measurement Index := 1
+#   funct7 = XX
+# tb_funct7 = 00
+#    Time: 46 ns  Iteration: 0  Instance: /decoder_tb
+# ** Error: Measurement Index := 1
+#   funct3 = X
+# tb_funct3 = 0
+#    Time: 46 ns  Iteration: 0  Instance: /decoder_tb
+# ** Error: Measurement Index := 1
+#   rs1 = XX
+# tb_rs1 = 1C
+#    Time: 46 ns  Iteration: 0  Instance: /decoder_tb
+# ** Error: Measurement Index := 1
+#   rs2 = XX
+# tb_rs2 = 11
+#    Time: 46 ns  Iteration: 0  Instance: /decoder_tb
+# ** Error: Measurement Index := 1
+#   rd = XX
+# tb_rd = 12
+#    Time: 46 ns  Iteration: 0  Instance: /decoder_tb
+# ** Note: Simulation Completed
+#    Time: 47 ns  Iteration: 0  Instance: /decoder_tb
+# transcript off

@@ -10,7 +10,7 @@ entity decoder_tb is
     generic (N : natural := 64);
 end decoder_tb;
 
-architecture sim of decoder_tb is
+architecture behavioural of decoder_tb is
 
     -- TODO: Next steps, wait until allout is finished and compare the values
 	constant TestVectorFile : string := "DecoderUnit00.tvs";
@@ -40,6 +40,18 @@ architecture sim of decoder_tb is
     signal tb_rs1 : std_logic_vector(4 downto 0);
     signal tb_rs2 : std_logic_vector(4 downto 0);
     signal tb_rd : std_logic_vector(4 downto 0);
+
+    component decoder is
+       port (
+        instruction : in std_logic_vector(31 downto 0);
+        opcode : out std_logic_vector(6 downto 0);
+        funct7 : out std_logic_vector(6 downto 0);
+        funct3 : out std_logic_vector(2 downto 0);
+        rs1 : out std_logic_vector(4 downto 0);
+        rs2 : out std_logic_vector(4 downto 0);
+        rd : out std_logic_vector(4 downto 0)
+    );
+    end component decoder;
 
 
     Signal MeasurementIndex : Integer := 0;
@@ -79,12 +91,13 @@ begin
         variable rdVar : std_logic_vector(4 downto 0);
 
     begin
-        
+        -- open the file after reset is 0
         wait until Resetn = '0';
         wait for 10 ns;
         file_open( VectorFile, TestVectorFile, read_mode );
         report "Using TestVectors from file " & TestVectorFile;
 
+        -- continuously read the file until you reach the end
         while not endfile( VectorFile ) loop
             -- set values to 'X'
             MeasurementIndex <= MeasurementIndex + 1;
@@ -119,6 +132,7 @@ begin
             tb_rs2 <= rs2Var;
             tb_rd <= rdVar;
 
+            wait until allout'active = true;
             wait until allout'quiet(PostStimTime) = true;
 
             EndTime := Now;
@@ -185,4 +199,4 @@ begin
     Wait;
     end process;
 
-end architecture;
+end architecture behavioural;

@@ -39,6 +39,7 @@ Configuration TimeSUSim of TbShiftUnit is
 		for DUT : ShiftUnit use entity work.ShiftUnit(structure); end for;
 	end for;
 End Configuration TimeSUSim;
+
 --
 --
 -- Execution Unit Configurations

@@ -16,7 +16,26 @@ entity decoder is
 end decoder;
 
 architecture rtl of decoder is
-
+    signal interop : std_logic_vector(6 downto 0);
 begin
+    -- read the last 7 bits to determine the opcode
+    process(instruction) is
+        begin
+            interop <= instruction(6 downto 0);
+            opcode <= interop;
+            if interop = "0110011" then
+                rd <= instruction(11 downto 7);
+                funct3 <= instruction(14 downto 12);
+                rs1 <= instruction(19 downto 15);
+                rs2 <= instruction(24 downto 20);
+                funct7 <= instruction(31 downto 25);
+            else
+                rd <= (others => 'X');
+                funct3 <= (others => 'X');
+                rs1 <= (others => 'X');
+                rs2 <= (others => 'X');
+                funct7 <= (others => 'X');
+            end if;
+    end process;
 
 end architecture;
