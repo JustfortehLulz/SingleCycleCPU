@@ -66,7 +66,7 @@ begin
 
     allout <= opcode & funct7 & funct3 & rs1 & rs2 & rd;
 
-    DUT : entity work.decoder(rtl) generic map (N => N)
+    DUT : component decoder generic map (N => N)
     port map (
             instruction => instruction,
             opcode => opcode,
@@ -101,18 +101,12 @@ begin
         while not endfile( VectorFile ) loop
             -- set values to 'X'
             MeasurementIndex <= MeasurementIndex + 1;
-            instruction <= (others => 'X');
-            opcode <= (others => 'X');
-            funct7 <= (others => 'X');
-            funct3 <= (others => 'X');
-            rs1 <= (others => 'X');
-            rs2 <= (others => 'X');
-            rd <= (others => 'X');
 
             ResultV := 'X';
             PropTimeDelay := 0 ns;
             wait for PreStimTime;
             -- setup input values
+            
             StartTime := NOW;
             ResultV := '1';
             readline(VectorFile, LineBuffer);
@@ -125,6 +119,7 @@ begin
             read(LineBuffer, opVar);
 
             instruction <= instVar;
+
             tb_opcode <= opVar;
             tb_funct7 <= sevenVar;
             tb_funct3 <= threeVar;
@@ -132,7 +127,7 @@ begin
             tb_rs2 <= rs2Var;
             tb_rd <= rdVar;
 
-            wait until allout'active = true;
+            -- wait until allout'active = true;
             wait until allout'quiet(PostStimTime) = true;
 
             EndTime := Now;
@@ -192,11 +187,12 @@ begin
                 Severity error;
             end if;
 
-            wait until clock = '1';
+            wait until Clock = '1';
         end loop;
     Report "Simulation Completed";
     file_close( VectorFile );
-    Wait;
-    end process;
+    wait;
+    
+    end process SEQUENCER_PROC;
 
 end architecture behavioural;
