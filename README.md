@@ -1,7 +1,3 @@
 Things to do:
 
-Create the testbench for the decoder text file in DecoderUnit00.txt
-
-Finish code in TBDecoder.vhd
-
-Finish code in Decoder.vhd
+Adding test values using DecoderUnit00.tvs. Adding more OR instruction test cases
