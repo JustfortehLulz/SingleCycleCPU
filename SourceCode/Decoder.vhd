@@ -20,7 +20,9 @@ begin
     -- read the last 7 bits to determine the opcode
         Process(instruction) is
             constant R_TYPE : std_logic_vector(6 downto 0) := "0110011";
+            constant I_TYPE : std_logic_vector(6 downto 0) := "0010011";
             variable interop : std_logic_vector(6 downto 0) := "0000000";
+            variable immediate : std_logic_vector(11 downto 0) := "000000000000";
         Begin
             interop := instruction(6 downto 0);
             if interop = R_TYPE then
@@ -29,6 +31,13 @@ begin
                 rs1 <= instruction(19 downto 15);
                 rs2 <= instruction(24 downto 20);
                 funct7 <= instruction(31 downto 25);
+            elsif interop = I_TYPE then
+                rd <= instruction(11 downto 7);
+                funct3 <= instruction(14 downto 12);
+                rs1 <= instruction(19 downto 15);
+                immediate := instruction(31 downto 20);
+                rs2 <= (others => 'X');
+                funct7 <= (others => 'X');
             else 
                 rd <= (others => '0');
                 funct3 <= (others => '0');
