@@ -30,6 +30,7 @@ architecture behavioural of decoder_tb is
     signal rs1 : std_logic_vector(4 downto 0);
     signal rs2 : std_logic_vector(4 downto 0);
     signal rd : std_logic_vector(4 downto 0);
+    signal imm : std_logic_vector(11 downto 0);
 
     signal allout : std_logic_vector(31 downto 0);
 
@@ -40,6 +41,7 @@ architecture behavioural of decoder_tb is
     signal tb_rs1 : std_logic_vector(4 downto 0);
     signal tb_rs2 : std_logic_vector(4 downto 0);
     signal tb_rd : std_logic_vector(4 downto 0);
+    signal tb_imm : std_logic_vector(11 downto 0);
 
     component decoder is
        port (
@@ -49,7 +51,8 @@ architecture behavioural of decoder_tb is
         funct3 : out std_logic_vector(2 downto 0);
         rs1 : out std_logic_vector(4 downto 0);
         rs2 : out std_logic_vector(4 downto 0);
-        rd : out std_logic_vector(4 downto 0)
+        rd : out std_logic_vector(4 downto 0);
+        imm : out std_logic_vector(11 downto 0)
     );
     end component decoder;
 
@@ -74,7 +77,8 @@ begin
             funct3 => funct3,
             rs1 => rs1,
             rs2 => rs2,
-            rd => rd
+            rd => rd,
+            imm => imm
     );
 
     SEQUENCER_PROC : process
@@ -89,6 +93,7 @@ begin
         variable rs1Var : std_logic_vector(4 downto 0);
         variable rs2Var : std_logic_vector(4 downto 0);
         variable rdVar : std_logic_vector(4 downto 0);
+        variable immVar : std_logic_vector(11 downto 0);
 
     begin
         -- open the file after reset is 0
@@ -117,6 +122,7 @@ begin
             read(LineBuffer, threeVar);
             read(LineBuffer, rdVar);
             read(LineBuffer, opVar);
+            read(LineBuffer, immVar);
 
             instruction <= instVar;
 
@@ -126,6 +132,7 @@ begin
             tb_rs1 <= rs1Var;
             tb_rs2 <= rs2Var;
             tb_rd <= rdVar;
+            tb_imm <= immVar;
 
             -- wait until allout'active = true;
             wait until allout'quiet(PostStimTime) = true;
@@ -184,6 +191,15 @@ begin
                 Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
                 "  rd = " & to_hstring(rd) & CR &
                 "tb_rd = " & to_hstring(tb_rd)
+                Severity error;
+            end if;
+
+            if imm /= tb_imm then
+                ResultV := '0';
+                assert rs1 = tb_rs1
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  imm = " & to_hstring(imm) & CR &
+                "tb_imm = " & to_hstring(tb_imm)
                 Severity error;
             end if;
 

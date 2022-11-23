@@ -11,7 +11,8 @@ entity decoder is
         funct3 : out std_logic_vector(2 downto 0);
         rs1 : out std_logic_vector(4 downto 0);
         rs2 : out std_logic_vector(4 downto 0);
-        rd : out std_logic_vector(4 downto 0)
+        rd : out std_logic_vector(4 downto 0);
+        imm : out std_logic_vector(11 downto 0)
     );
 end decoder;
 
@@ -22,7 +23,6 @@ begin
             constant R_TYPE : std_logic_vector(6 downto 0) := "0110011";
             constant I_TYPE : std_logic_vector(6 downto 0) := "0010011";
             variable interop : std_logic_vector(6 downto 0) := "0000000";
-            variable immediate : std_logic_vector(11 downto 0) := "000000000000";
         Begin
             interop := instruction(6 downto 0);
             if interop = R_TYPE then
@@ -31,11 +31,12 @@ begin
                 rs1 <= instruction(19 downto 15);
                 rs2 <= instruction(24 downto 20);
                 funct7 <= instruction(31 downto 25);
+                imm <= (others => 'X');
             elsif interop = I_TYPE then
                 rd <= instruction(11 downto 7);
                 funct3 <= instruction(14 downto 12);
                 rs1 <= instruction(19 downto 15);
-                immediate := instruction(31 downto 20);
+                imm <= instruction(31 downto 20);
                 rs2 <= (others => 'X');
                 funct7 <= (others => 'X');
             else 
@@ -44,6 +45,7 @@ begin
                 rs1 <= (others => '0');
                 rs2 <= (others => '0');
                 funct7 <= (others => '0');
+                imm <= (others => '0');
             end if;
             opcode <= interop;
         end process;

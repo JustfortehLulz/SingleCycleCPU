@@ -6,12 +6,12 @@ add wave -noupdate /decoder_tb/Clock
 add wave -noupdate /decoder_tb/Resetn
 add wave -noupdate /decoder_tb/instruction
 add wave -noupdate /decoder_tb/opcode
-add wave -noupdate /decoder_tb/DUT/interop
 add wave -noupdate /decoder_tb/funct7
 add wave -noupdate /decoder_tb/funct3
 add wave -noupdate /decoder_tb/rs1
 add wave -noupdate /decoder_tb/rs2
 add wave -noupdate /decoder_tb/rd
+add wave -noupdate /decoder_tb/imm
 add wave -noupdate /decoder_tb/allout
 add wave -noupdate /decoder_tb/tb_opcode
 add wave -noupdate /decoder_tb/tb_funct7
@@ -20,8 +20,9 @@ add wave -noupdate /decoder_tb/tb_rs1
 add wave -noupdate /decoder_tb/tb_rs2
 add wave -noupdate /decoder_tb/tb_rd
 add wave -noupdate /decoder_tb/MeasurementIndex
+add wave -noupdate /decoder_tb/tb_imm
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {34700 ps} 0}
+WaveRestoreCursors {{Cursor 1} {224000 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
