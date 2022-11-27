@@ -23,6 +23,7 @@ begin
             constant R_TYPE : std_logic_vector(6 downto 0) := "0110011";
             constant I_TYPE : std_logic_vector(6 downto 0) := "0010011";
             variable interop : std_logic_vector(6 downto 0) := "0000000";
+            variable inter3 : std_logic_vector(2 downto 0) := "000";
         Begin
             interop := instruction(6 downto 0);
             if interop = R_TYPE then
@@ -34,11 +35,20 @@ begin
                 imm <= (others => 'X');
             elsif interop = I_TYPE then
                 rd <= instruction(11 downto 7);
-                funct3 <= instruction(14 downto 12);
+                inter3 := instruction(14 downto 12); -- added since switching for SLLI instructions cause issues
                 rs1 <= instruction(19 downto 15);
                 imm <= instruction(31 downto 20);
                 rs2 <= (others => 'X');
-                funct7 <= (others => 'X');
+                if(inter3 = "001") then
+                    funct7 <= (others => '0');
+                elsif(inter3 = "101" and imm(11 downto 5) = "0000000") then
+                    funct7 <= (others => '0');
+                elsif(inter3 = "101" and imm(11 downto 5) = "0010100") then
+                    funct7 <= "0010100";
+                else
+                    funct7 <= (others => 'X');
+                end if;
+                funct3 <= inter3;
             else 
                 rd <= (others => '0');
                 funct3 <= (others => '0');
