@@ -22,8 +22,11 @@ begin
         Process(instruction) is
             constant R_TYPE : std_logic_vector(6 downto 0) := "0110011";
             constant I_TYPE : std_logic_vector(6 downto 0) := "0010011";
+            constant I_TYPE_LOAD : std_logic_vector(6 downto 0) := "0000011";
             variable interop : std_logic_vector(6 downto 0) := "0000000";
             variable inter3 : std_logic_vector(2 downto 0) := "000";
+            variable interRD : std_logic_vector(4 downto 0) := "00000";
+            variable interR1 : std_logic_vector(4 downto 0) := "00000";
             variable imm7 : std_logic_vector(6 downto 0) := "0000000";
         Begin
             interop := instruction(6 downto 0);
@@ -51,6 +54,13 @@ begin
                     funct7 <= (others => 'X');
                 end if;
                 funct3 <= inter3;
+            elsif interop = I_TYPE_LOAD then
+                interRD := instruction(11 downto 7);
+                funct3 <= instruction(14 downto 12);
+                interR1 := instruction(19 downto 15);
+                imm <= instruction(31 downto 20);
+                rd <= interRD;
+                rs1 <= interR1;
             else 
                 rd <= (others => '0');
                 funct3 <= (others => '0');
