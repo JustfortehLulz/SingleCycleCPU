@@ -2,7 +2,7 @@ Things to do:
 
 Adding test values using DecoderUnit00.tvs. 
 
-Still need to add lh, lw, lbu, lhu, and jalr.
+Still need to add lw, lbu, lhu, and jalr.
 Add S instructions
 Add B instructions
 Add J instructions
