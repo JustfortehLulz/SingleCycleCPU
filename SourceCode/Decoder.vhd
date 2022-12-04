@@ -23,11 +23,13 @@ begin
             constant R_TYPE : std_logic_vector(6 downto 0) := "0110011";
             constant I_TYPE : std_logic_vector(6 downto 0) := "0010011";
             constant I_TYPE_LOAD : std_logic_vector(6 downto 0) := "0000011";
+            constant S_TYPE : std_logic_vector(6 downto 0) := "0100011";
             variable interop : std_logic_vector(6 downto 0) := "0000000";
             variable inter3 : std_logic_vector(2 downto 0) := "000";
             variable interRD : std_logic_vector(4 downto 0) := "00000";
             variable interR1 : std_logic_vector(4 downto 0) := "00000";
             variable imm7 : std_logic_vector(6 downto 0) := "0000000";
+            variable interImm : std_logic_vector(11 downto 0) := "000000000000";
         Begin
             interop := instruction(6 downto 0);
             if interop = R_TYPE then
@@ -59,8 +61,20 @@ begin
                 funct3 <= instruction(14 downto 12);
                 interR1 := instruction(19 downto 15);
                 imm <= instruction(31 downto 20);
+
                 rd <= interRD;
                 rs1 <= interR1;
+            elsif interop = S_TYPE then
+                interImm(4 downto 0) := instruction(11 downto 7);
+                inter3 := instruction(14 downto 12);
+                rs1 <= instruction(19 downto 15);
+                rs2 <= instruction(24 downto 20);
+                interImm(11 downto 5) := instruction(31 downto 25);
+
+                rd <= (others => 'X');
+                funct7 <= (others => 'X');
+                funct3 <= inter3;
+                imm <= interImm;
             else 
                 rd <= (others => '0');
                 funct3 <= (others => '0');
