@@ -24,6 +24,7 @@ begin
             constant I_TYPE : std_logic_vector(6 downto 0) := "0010011";
             constant I_TYPE_LOAD : std_logic_vector(6 downto 0) := "0000011";
             constant S_TYPE : std_logic_vector(6 downto 0) := "0100011";
+            constant B_TYPE : std_logic_vector(6 downto 0) := "1100011";
             variable interop : std_logic_vector(6 downto 0) := "0000000";
             variable inter3 : std_logic_vector(2 downto 0) := "000";
             variable interRD : std_logic_vector(4 downto 0) := "00000";
@@ -75,6 +76,8 @@ begin
                 funct7 <= (others => 'X');
                 funct3 <= inter3;
                 imm <= interImm;
+            elsif interop = B_TYPE then
+                -- implement this lol
             else 
                 rd <= (others => '0');
                 funct3 <= (others => '0');
