@@ -3,7 +3,7 @@ Things to do:
 Adding test values using DecoderUnit00.tvs. 
 
 Still need to add jalr.
-Add S instructions (SH, SW)
+Add S instructions (SW)
 Add B instructions
 Add J instructions
 Add U instructions
