@@ -3,7 +3,7 @@ Things to do:
 Adding test values using DecoderUnit00.tvs. 
 
 Still need to add jalr.
-Add B instructions (BNE, BLT, BGE, BLTU, BGEU)
+Add B instructions (BGEU)
 Add J instructions
 Add U instructions
 
