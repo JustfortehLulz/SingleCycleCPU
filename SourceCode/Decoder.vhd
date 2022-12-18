@@ -78,6 +78,15 @@ begin
                 imm <= interImm;
             elsif interop = B_TYPE then
                 -- implement this lol
+                inter3 := instruction(14 downto 12);
+                rs1 <= instruction(19 downto 15);
+                rs2 <= instruction(24 downto 20);
+                interImm := instruction(31) & instruction(7) & instruction(30 downto 25) & instruction(11 downto 8);
+
+                rd <= (others => 'X');
+                funct7 <= (others => 'X');
+                funct3 <= inter3;
+                imm <= interImm;
             else 
                 rd <= (others => '0');
                 funct3 <= (others => '0');
