@@ -12,7 +12,8 @@ entity decoder is
         rs1 : out std_logic_vector(4 downto 0);
         rs2 : out std_logic_vector(4 downto 0);
         rd : out std_logic_vector(4 downto 0);
-        imm : out std_logic_vector(11 downto 0)
+        imm : out std_logic_vector(11 downto 0);
+        longImm : out std_logic_vector(19 downto 0)
     );
 end decoder;
 
@@ -25,12 +26,14 @@ begin
             constant I_TYPE_LOAD : std_logic_vector(6 downto 0) := "0000011";
             constant S_TYPE : std_logic_vector(6 downto 0) := "0100011";
             constant B_TYPE : std_logic_vector(6 downto 0) := "1100011";
+            constant J_TYPE : std_logic_vector(6 downto 0) := "1101111";
             variable interop : std_logic_vector(6 downto 0) := "0000000";
             variable inter3 : std_logic_vector(2 downto 0) := "000";
             variable interRD : std_logic_vector(4 downto 0) := "00000";
             variable interR1 : std_logic_vector(4 downto 0) := "00000";
             variable imm7 : std_logic_vector(6 downto 0) := "0000000";
             variable interImm : std_logic_vector(11 downto 0) := "000000000000";
+            variable interLongImm : std_logic_vector(19 downto 0) := "00000000000000000000";
         Begin
             interop := instruction(6 downto 0);
             if interop = R_TYPE then
@@ -40,6 +43,7 @@ begin
                 rs2 <= instruction(24 downto 20);
                 funct7 <= instruction(31 downto 25);
                 imm <= (others => 'X');
+                longImm <= (others => 'X');
             elsif interop = I_TYPE then
                 rd <= instruction(11 downto 7);
                 inter3 := instruction(14 downto 12); -- added since switching for SLLI instructions cause issues
@@ -47,6 +51,7 @@ begin
                 imm7 := instruction(31 downto 25);
                 imm <= instruction(31 downto 20);
                 rs2 <= (others => 'X');
+                longImm <= (others => 'X');
                 if(inter3 = "001") then
                     funct7 <= (others => '0');
                 elsif(inter3 = "101" and imm7 = "0000000") then
@@ -62,6 +67,7 @@ begin
                 funct3 <= instruction(14 downto 12);
                 interR1 := instruction(19 downto 15);
                 imm <= instruction(31 downto 20);
+                longImm <= (others => 'X');
 
                 rd <= interRD;
                 rs1 <= interR1;
@@ -74,10 +80,10 @@ begin
 
                 rd <= (others => 'X');
                 funct7 <= (others => 'X');
+                longImm <= (others => 'X');
                 funct3 <= inter3;
                 imm <= interImm;
             elsif interop = B_TYPE then
-                -- implement this lol
                 inter3 := instruction(14 downto 12);
                 rs1 <= instruction(19 downto 15);
                 rs2 <= instruction(24 downto 20);
@@ -85,8 +91,19 @@ begin
 
                 rd <= (others => 'X');
                 funct7 <= (others => 'X');
+                longImm <= (others => 'X');
                 funct3 <= inter3;
                 imm <= interImm;
+            elsif interop = J_TYPE then
+                funct7 <= (others => 'X');
+                rs2 <= (others => 'X');
+                rs1 <= (others => 'X');
+                funct3 <= (others => 'X');
+                imm <= (others => 'X');
+
+                rd <= instruction(11 downto 7);
+                interLongImm := instruction(31) & instruction(19 downto 12) & instruction(20) & instruction(30 downto 21);
+                longImm <= interLongImm;
             else 
                 rd <= (others => '0');
                 funct3 <= (others => '0');
@@ -94,6 +111,7 @@ begin
                 rs2 <= (others => '0');
                 funct7 <= (others => '0');
                 imm <= (others => '0');
+                longImm <= (others => '0');
             end if;
             opcode <= interop;
         end process;

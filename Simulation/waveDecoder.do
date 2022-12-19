@@ -19,10 +19,12 @@ add wave -noupdate /decoder_tb/rd
 add wave -noupdate /decoder_tb/tb_rd
 add wave -noupdate /decoder_tb/imm
 add wave -noupdate /decoder_tb/tb_imm
+add wave -noupdate /decoder_tb/longImm
+add wave -noupdate /decoder_tb/tb_longImm
 add wave -noupdate /decoder_tb/MeasurementIndex
 add wave -noupdate /decoder_tb/allout
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {3339200 ps} 0}
+WaveRestoreCursors {{Cursor 1} {10864000 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -38,4 +40,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits sec
 update
-WaveRestoreZoom {0 ps} {4326 ns}
+WaveRestoreZoom {0 ps} {105 us}
