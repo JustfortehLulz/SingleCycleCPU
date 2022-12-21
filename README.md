@@ -2,7 +2,7 @@ Things to do:
 
 Adding test values using DecoderUnit00.tvs. 
 
-Add U instructions
+Test U instructions
 
 Completed:
 
