@@ -28,6 +28,8 @@ begin
             constant S_TYPE : std_logic_vector(6 downto 0) := "0100011";
             constant B_TYPE : std_logic_vector(6 downto 0) := "1100011";
             constant J_TYPE : std_logic_vector(6 downto 0) := "1101111";
+            constant LUI_TYPE : std_logic_vector(6 downto 0) := "0110111";
+            constant AUIPC_TYPE : std_logic_vector(6 downto 0) := "0010111";
             variable interop : std_logic_vector(6 downto 0) := "0000000";
             variable inter3 : std_logic_vector(2 downto 0) := "000";
             variable interRD : std_logic_vector(4 downto 0) := "00000";
@@ -115,6 +117,28 @@ begin
 
                 rd <= instruction(11 downto 7);
                 interLongImm := instruction(31) & instruction(19 downto 12) & instruction(20) & instruction(30 downto 21);
+                longImm <= interLongImm;
+            elsif interop = LUI_TYPE then
+                funct7 <= (others => 'X');
+                rs2 <= (others => 'X');
+                rs1 <= (others => 'X');
+                funct3 <= (others => 'X');
+                imm <= (others => 'X');
+
+                interRD := instruction(11 downto 7);
+                interLongImm := instruction(31 downto 12);
+                rd <= interRD;
+                longImm <= interLongImm;
+            elsif interop = AUIPC_TYPE then
+                funct7 <= (others => 'X');
+                rs2 <= (others => 'X');
+                rs1 <= (others => 'X');
+                funct3 <= (others => 'X');
+                imm <= (others => 'X');
+
+                interRD := instruction(11 downto 7);
+                interLongImm := instruction(31 downto 12);
+                rd <= interRD;
                 longImm <= interLongImm;
             else 
                 rd <= (others => '0');
