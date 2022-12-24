@@ -10,7 +10,7 @@ entity registerFile is
         regB : in std_logic_vector (4 downto 0);
         regD : in std_logic_vector (4 downto 0);
         regWrite : in std_logic;
-        writeReg : in std_logic_vector(N-1 downto 0);
+        writeVal : in std_logic_vector(N-1 downto 0);
         outA : out std_logic_vector(N-1 downto 0);
         outB : out std_logic_vector(N-1 downto 0);
     );
@@ -20,9 +20,8 @@ architecture rtl of registerFile is
     type file_reg is array (0 to 31) of std_logic_vector(N-1 downto 0);
     signal reg : file_reg;
 begin
-
+    reg(0) <= (others => '0');
     process() is
-        reg(0) <= (others => '0');
         variable interA : std_logic_vector(N-1 downto 0);
         variable interB : std_logic_vector(N-1 downto 0);
         begin

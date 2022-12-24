@@ -26,7 +26,7 @@ architecture sim of registerFile_tb is
     signal regB : std_logic_vector(4 downto 0);
     signal regD : std_logic_vector (4 downto 0);
     signal regWrite : std_logic;
-    signal writeReg : std_logic_vector(N-1 downto 0);
+    signal writeVal : std_logic_vector(N-1 downto 0);
     signal outA : std_logic_vector(N-1 downto 0);
     signal outB : std_logic_vector(N-1 downto 0);
 
@@ -47,7 +47,7 @@ architecture sim of registerFile_tb is
         regB : in std_logic_vector (4 downto 0);
         regD : in std_logic_vector (4 downto 0);
         regWrite : in std_logic;
-        writeReg : in std_logic_vector(N-1 downto 0);
+        writeVal : in std_logic_vector(N-1 downto 0);
         outA : out std_logic_vector(N-1 downto 0);
         outB : out std_logic_vector(N-1 downto 0)
     );
@@ -74,18 +74,10 @@ begin
         regB => regB,
         regD => regD,
         regWrite => regWrite,
-        writeReg => writeReg,   
+        writeVal => writeVal,   
         outA => outA,
         outB => outB
     );
-    -- DUT : entity work.registerFile(rtl)
-    -- port map (
-    --     clk => clk,
-    --     rst => rst,
-        
-    -- );
-    
-    -- TODO: create your register file values
     
 
     SEQUENCER_PROC : process
