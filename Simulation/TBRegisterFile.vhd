@@ -16,7 +16,7 @@ architecture sim of registerFile_tb is
     constant ClockPeriod : time := 2 ns;
     constant ResetPeriod : time := 5 ns;
     constant PreStimTime : time := 1 ns;
-    constant PostStimTime  time := 30 ns;
+    constant PostStimTime : time := 30 ns;
 
     signal Sstable, Squiet : boolean := false;
 
@@ -37,7 +37,7 @@ architecture sim of registerFile_tb is
     signal tb_regB : std_logic_vector(4 downto 0);
     signal tb_regD : std_logic_vector (4 downto 0);
     signal tb_regWrite : std_logic;
-    signal tb_writeReg : std_logic_vector(N-1 downto 0);
+    signal tb_writeVal : std_logic_vector(N-1 downto 0);
     signal tb_outA : std_logic_vector(N-1 downto 0);
     signal tb_outB : std_logic_vector(N-1 downto 0);
 
@@ -56,15 +56,15 @@ architecture sim of registerFile_tb is
     signal MeasurementIndex : integer := 0;
     file vectorFile : text;
 
-    -- create a register file
-    type file_reg is array (0 to 31) of std_logic_vector(N-1 downto 0);
-    variable reg : file_reg;
+    -- -- create a register file
+    -- type file_reg is array (0 to 31) of std_logic_vector(N-1 downto 0);
+    -- variable reg : file_reg;
 begin
 
     Clock <= not Clock after ClockPeriod/2;
 	Resetn <= '1', '0' after ResetPeriod;
-	Sstable <= opcode'stable(PostStimTime);
-	Squiet <= opcode'quiet(PostStimTime);
+	Sstable <= regA'stable(PostStimTime);
+	Squiet <= regA'quiet(PostStimTime);
 
     allout <= outA & outB;
 
@@ -89,7 +89,7 @@ begin
         variable bVar : std_logic_vector(4 downto 0);
         variable dVar : std_logic_vector(4 downto 0);
         variable regWriteVar : std_logic;
-        variable writeRegVar : std_logic_vector(N-1 downto 0);
+        variable writeValVar : std_logic_vector(N-1 downto 0);
         variable outAReg : std_logic_vector(N-1 downto 0);
         variable outBReg : std_logic_vector(N-1 downto 0);
     begin
@@ -112,12 +112,38 @@ begin
             ResultV := '1';
 
             -- TODO: reading all of the TVS file into here
+            readline(vectorFile,linebuffer);
+            read(linebuffer,aVar);
+            read(linebuffer,bVar);
+            read(linebuffer,dVar);
+            read(linebuffer,regWriteVar);
+            read(linebuffer,writeValVar);
+            read(linebuffer,outAReg);
+            read(linebuffer,outBReg);
+
+            tb_regA <= aVar;
+            tb_regB <= bVar;
+            tb_regD <= dVar;
+            tb_regWrite <= regWriteVar;
+            tb_writeVal <= writeValVar;
+            tb_outA <= outAReg;
+            tb_outB <= outBReg;
+
+            -- testing writing into regFile
+            if (regWriteVar = '1') then
+                regD <= dVar;
+                regWrite <= regWriteVar;
+                writeVal <= writeValVar;
+            end if;
 
             -- wait until allout'active = true;
             wait until allout'quiet(PostStimTime) = true;
 
             EndTime := Now;
             PropTimeDelay := EndTime - StartTime - allout'Last_Active;
+
+            -- do comparisions here
+
         end loop;
     report "Simulation Complete";
     file_close(vectorFile);

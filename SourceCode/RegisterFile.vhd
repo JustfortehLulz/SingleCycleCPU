@@ -12,7 +12,7 @@ entity registerFile is
         regWrite : in std_logic;
         writeVal : in std_logic_vector(N-1 downto 0);
         outA : out std_logic_vector(N-1 downto 0);
-        outB : out std_logic_vector(N-1 downto 0);
+        outB : out std_logic_vector(N-1 downto 0)
     );
 end registerFile;
 
@@ -21,11 +21,21 @@ architecture rtl of registerFile is
     signal reg : file_reg;
 begin
     reg(0) <= (others => '0');
-    process() is
+    process(regA, regB, regD, regWrite, writeVal) is
         variable interA : std_logic_vector(N-1 downto 0);
         variable interB : std_logic_vector(N-1 downto 0);
         begin
-            interA <= reg(regASel);
+            -- writing values into the registerFile
+            if(regWrite = '1') then
+                reg(to_integer(unsigned(regD))) <= writeVal;
+                outA <= (others => 'X');
+                outB <= (others => 'X');
+            --elsif (regWrite = 0) then
+                
+            --else
+
+            end if;
+
         end process;
 
 end architecture;
