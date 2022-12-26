@@ -96,11 +96,11 @@ begin
         -- open the file after reset is 0
         wait until Resetn = '0';
         wait for 10 ns;
-        file_open( VectorFile, TestVectorFile, read_mode );
+        file_open( vectorFile, TestVectorFile, read_mode );
         report "Using TestVectors from file " & TestVectorFile;
 
         -- continuously read the file until you reach the end
-        while not endfile( VectorFile ) loop
+        while not endfile( vectorFile ) loop
             MeasurementIndex <= MeasurementIndex + 1;
 
             ResultV := 'X';

@@ -1,5 +1,5 @@
 quit -sim
-transcript file DecoderUnitTranscript.txt
+transcript file RegFileTranscript.txt
 transcript on
 #----------------------------------------------------------------------------------------------------------
 # compile
