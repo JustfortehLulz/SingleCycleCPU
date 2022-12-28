@@ -3,7 +3,6 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use std.TEXTIO.all;
 
-use std.textio.all;
 use std.env.finish;
 
 entity registerFile_tb is
@@ -134,6 +133,69 @@ begin
                 regD <= dVar;
                 regWrite <= regWriteVar;
                 writeVal <= writeValVar;
+
+                if tb_regD /= regD then
+                    ResultV := '0';
+                    assert tb_regD = regD 
+                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_regD = " & to_hstring(tb_regD) & CR &
+                "regD = " & to_hstring(regD)
+                Severity error;
+                end if;
+
+                -- if tb_regWrite /= regWrite then
+                --     ResultV := '0';
+                --     assert tb_regWrite = regWrite
+                --     Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                --     "  tb_regWrite = " & to_hstring(tb_regWrite) & CR &
+                --     "regWrite = " & to_hstring(regWrite)
+                --     Severity error;
+                -- end if;
+    
+                if tb_writeVal /= writeVal then
+                    ResultV := '0';
+                    assert tb_writeVal = writeVal
+                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_writeVal = " & to_hstring(tb_writeVal) & CR &
+                "writeVal = " & to_hstring(writeVal)
+                    Severity error;
+                end if;
+
+                if tb_regA /= regA then
+                    ResultV := '0';
+                    assert tb_regA = regA
+                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_regA = " & to_hstring(tb_regA) & CR &
+                "regA = " & to_hstring(regA)
+                    Severity error;
+                end if;
+
+                if tb_regB /= regB then
+                    ResultV := '0';
+                    assert tb_regB = regB
+                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_regB = " & to_hstring(tb_regB) & CR &
+                "regB = " & to_hstring(regB)
+                    Severity error;
+                end if;
+
+                if tb_outA /= outA then
+                    ResultV := '0';
+                    assert tb_outA = outA
+                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_outA = " & to_hstring(tb_outA) & CR &
+                "outA = " & to_hstring(outA)
+                    Severity error;
+                end if;
+
+                if tb_outB /= outB then
+                    ResultV := '0';
+                    assert tb_outB = outB
+                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_outB = " & to_hstring(tb_outB) & CR &
+                "outB = " & to_hstring(outB)
+                    Severity error;
+                end if;
             end if;
 
             -- wait until allout'active = true;
