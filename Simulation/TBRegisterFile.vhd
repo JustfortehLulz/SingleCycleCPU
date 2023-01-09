@@ -102,7 +102,7 @@ begin
         while not endfile( VectorFile ) loop
             MeasurementIndex <= MeasurementIndex + 1;
 
-            Report "Meausurement: " & to_string(MeasurementIndex);
+            -- Report "Meausurement: " & to_string(MeasurementIndex);
 
             ResultV := 'X';
             PropTimeDelay := 0 ns;
@@ -113,14 +113,14 @@ begin
             ResultV := '1';
 
             -- TODO: reading all of the TVS file into here
-            readline(vectorFile,linebuffer);
-            read(linebuffer,aVar);
-            read(linebuffer,bVar);
-            read(linebuffer,dVar);
-            read(linebuffer,regWriteVar);
-            read(linebuffer,writeValVar);
-            read(linebuffer,outAReg);
-            read(linebuffer,outBReg);
+            readline(VectorFile,linebuffer);
+            read(linebuffer, aVar);
+            read(linebuffer, bVar);
+            read(linebuffer, dVar);
+            read(linebuffer, regWriteVar);
+            read(linebuffer, writeValVar);
+            read(linebuffer, outAReg);
+            read(linebuffer, outBReg);
 
             regA <= aVar;
             regB <= bVar;
@@ -128,8 +128,8 @@ begin
             regWrite <= regWriteVar;
             writeVal <= writeValVar;
 
-            Report "RegA : " & to_string(aVar) & CR & "RegB : " & to_string(bVar) & CR & "regD : " & to_string(dVar) 
-            & CR & "regWriteVar : " & to_string(regWriteVar) & CR & "writeVal : " & to_string(writeValVar);
+            --Report "RegA : " & to_string(aVar) & CR & "RegB : " & to_string(bVar) & CR & "regD : " & to_string(dVar) 
+            --& CR & "regWriteVar : " & to_string(regWriteVar) & CR & "writeVal : " & to_string(writeValVar);
             
             tb_regA <= aVar;
             tb_regB <= bVar;
@@ -139,77 +139,76 @@ begin
             tb_outA <= outAReg;
             tb_outB <= outBReg;
 
-            wait until allout'active = true;
-            wait until allout'quiet(PostStimTime) = true;
+            -- wait until allout'active = true;
+            -- this line below is the problem
+            -- wait until allout'quiet(PostStimTime) = true;
 
             EndTime := Now;
             PropTimeDelay := EndTime - StartTime - allout'Last_Active;
 
             -- testing writing into regFile
-            if (regWriteVar = '1') then
+            -- TODO: add testing for reading out values of outA and outB
+            if tb_regD /= regD then
+                ResultV := '0';
+                assert tb_regD = regD 
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_regD = " & to_hstring(tb_regD) & CR &
+                "regD = " & to_hstring(regD)
+                Severity error;
+            end if;
 
-                if tb_regD /= regD then
-                    ResultV := '0';
-                    assert tb_regD = regD 
-                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
-                    "  tb_regD = " & to_hstring(tb_regD) & CR &
-                    "regD = " & to_hstring(regD)
-                    Severity error;
-                end if;
+            if tb_regWrite /= regWrite then
+                ResultV := '0';
+                assert tb_regWrite = regWrite
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_regWrite = " & to_string(tb_regWrite) & CR &
+                "regWrite = " & to_string(regWrite)
+                Severity error;
+            end if;
 
-                if tb_regWrite /= regWrite then
-                    ResultV := '0';
-                    assert tb_regWrite = regWrite
-                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
-                    "  tb_regWrite = " & to_string(tb_regWrite) & CR &
-                    "regWrite = " & to_string(regWrite)
-                    Severity error;
-                end if;
-    
-                -- if tb_writeVal /= writeVal then
-                --     ResultV := '0';
-                --     assert tb_writeVal = writeVal
-                --     Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
-                -- "  tb_writeVal = " & to_hstring(tb_writeVal) & CR &
-                -- "writeVal = " & to_hstring(writeVal)
-                --     Severity error;
-                -- end if;
+            if tb_writeVal /= writeVal then
+                ResultV := '0';
+                assert tb_writeVal = writeVal
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+            "  tb_writeVal = " & to_hstring(tb_writeVal) & CR &
+            "writeVal = " & to_hstring(writeVal)
+                Severity error;
+            end if;
 
-                -- if tb_regA /= regA then
-                --     ResultV := '0';
-                --     assert tb_regA = regA
-                --     Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
-                -- "  tb_regA = " & to_hstring(tb_regA) & CR &
-                -- "regA = " & to_hstring(regA)
-                --     Severity error;
-                -- end if;
+            if tb_regA /= regA then
+                ResultV := '0';
+                assert tb_regA = regA
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+            "  tb_regA = " & to_hstring(tb_regA) & CR &
+            "regA = " & to_hstring(regA)
+                Severity error;
+            end if;
 
-                -- if tb_regB /= regB then
-                --     ResultV := '0';
-                --     assert tb_regB = regB
-                --     Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
-                -- "  tb_regB = " & to_hstring(tb_regB) & CR &
-                -- "regB = " & to_hstring(regB)
-                --     Severity error;
-                -- end if;
+            if tb_regB /= regB then
+                ResultV := '0';
+                assert tb_regB = regB
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+            "  tb_regB = " & to_hstring(tb_regB) & CR &
+            "regB = " & to_hstring(regB)
+                Severity error;
+            end if;
 
-                if tb_outA /= outA then
-                    ResultV := '0';
-                    assert tb_outA = outA
-                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
-                    "  tb_outA = " & to_hstring(tb_outA) & CR &
-                    "outA = " & to_hstring(outA)
-                    Severity error;
-                end if;
+            if tb_outA /= outA then
+                ResultV := '0';
+                assert tb_outA = outA
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_outA = " & to_hstring(tb_outA) & CR &
+                "outA = " & to_hstring(outA)
+                Severity error;
+            end if;
 
-                if tb_outB /= outB then
-                    ResultV := '0';
-                    assert tb_outB = outB
-                    Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
-                    "  tb_outB = " & to_hstring(tb_outB) & CR &
-                    "outB = " & to_hstring(outB)
-                    Severity error;
-                end if;
+            if tb_outB /= outB then
+                ResultV := '0';
+                assert tb_outB = outB
+                Report "Measurement Index := " & to_string(MeasurementIndex) & CR &
+                "  tb_outB = " & to_hstring(tb_outB) & CR &
+                "outB = " & to_hstring(outB)
+                Severity error;
             end if;
 
             wait until Clock = '1';
@@ -219,4 +218,4 @@ begin
     wait;
     end process SEQUENCER_PROC;
 
-end architecture;
+end architecture sim;
